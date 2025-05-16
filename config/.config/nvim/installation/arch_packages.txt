@@ -1,0 +1,3 @@
+neovim
+clang
+lua-language-server
