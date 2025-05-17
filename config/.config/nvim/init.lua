@@ -6,6 +6,7 @@ Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 Plug('neovim/nvim-lspconfig')
 Plug('hrsh7th/nvim-cmp')
 Plug('hrsh7th/cmp-nvim-lsp')
+Plug('jiangmiao/auto-pairs')
 vim.call('plug#end')
 
 home = os.getenv("HOME")
