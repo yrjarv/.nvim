@@ -19,7 +19,6 @@ vim.opt.swapfile      = false
 vim.opt.colorcolumn   = '80'
 vim.opt.textwidth     = 80
 vim.opt.formatoptions = vim.opt.formatoptions + "t"
-vim.opt.formatoptions = vim.opt.formatoptions + "a"
 
 -- Misc
 vim.opt.scrolloff     = 7 -- Start scrolling 7 lines before end of screen
