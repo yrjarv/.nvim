@@ -10,5 +10,5 @@ Requirements: `git` and `stow`
 ```bash
 git clone git@github.com:yrjarv/nvim ~/nvim
 cd nvim
-stow *
+stow */
 ```
