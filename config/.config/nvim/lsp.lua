@@ -61,3 +61,11 @@ cmp.setup({
 -- Setting up LSPs for commonly used languages
 require('lspconfig').lua_ls.setup({})
 require('lspconfig').clangd.setup({})
+require('lspconfig').rust_analyzer.setup({})
+vim.api.nvim_create_autocmd("FileType", { --Hacky solution to make rust lsp work
+  pattern = "rust",
+  callback = function()
+    require('lspconfig').rust_analyzer.setup({})
+    vim.cmd("LspStart rust_analyzer")
+  end,
+})
