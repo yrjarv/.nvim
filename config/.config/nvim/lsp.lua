@@ -69,3 +69,5 @@ vim.api.nvim_create_autocmd("FileType", { --Hacky solution to make rust lsp work
     vim.cmd("LspStart rust_analyzer")
   end,
 })
+require('lspconfig').pyright.setup({})
+require('lspconfig').ts_ls.setup({})
