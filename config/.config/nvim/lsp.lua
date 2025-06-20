@@ -71,3 +71,5 @@ vim.api.nvim_create_autocmd("FileType", { --Hacky solution to make rust lsp work
 })
 require('lspconfig').pyright.setup({})
 require('lspconfig').ts_ls.setup({})
+require('lspconfig').jdtls.setup({})
+require('lspconfig').kotlin_language_server.setup({})
