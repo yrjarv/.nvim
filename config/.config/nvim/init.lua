@@ -7,10 +7,7 @@ Plug('neovim/nvim-lspconfig')
 Plug('hrsh7th/nvim-cmp')
 Plug('hrsh7th/cmp-nvim-lsp')
 Plug('jiangmiao/auto-pairs')
-Plug('m4xshen/hardtime.nvim')
 vim.call('plug#end')
-
-require("hardtime").setup()
 
 home = os.getenv("HOME")
 package.path = home .. "/.config/nvim/?.lua;" .. package.path
