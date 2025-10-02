@@ -7,6 +7,7 @@ Plug('neovim/nvim-lspconfig')
 Plug('hrsh7th/nvim-cmp')
 Plug('hrsh7th/cmp-nvim-lsp')
 Plug('jiangmiao/auto-pairs')
+Plug('NStefan002/screenkey.nvim')
 vim.call('plug#end')
 
 home = os.getenv("HOME")
