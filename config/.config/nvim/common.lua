@@ -3,9 +3,11 @@ vim.wo.number         = true
 vim.wo.relativenumber = true
 
 -- Indentation
-vim.opt.tabstop       = 4
-vim.opt.softtabstop   = 4
-vim.opt.shiftwidth    = 4
+vim.opt.tabstop       = 8 -- Tabs should be wider than spaces indenting
+vim.opt.softtabstop   = 8 -- Tabs should be wider than spaces indenting
+vim.opt.shiftwidth    = 4 -- The size of an indent
+vim.opt.smarttab      = true
+vim.opt.expandtab     = true -- Always use spaces for indenting
 vim.opt.autoindent    = true
 
 -- Making nvim interact nicely with my system
