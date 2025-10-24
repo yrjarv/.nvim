@@ -1,85 +1,90 @@
 -- Reserve a space in the gutter
--- This will avoid an annoying layout shift in the screen
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
--- Add cmp_nvim_lsp capabilities settings to lspconfig
--- This should be executed before you configure any language server
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-	'force',
-	lspconfig_defaults.capabilities,
-	require('cmp_nvim_lsp').default_capabilities()
-)
+-- Add cmp_nvim_lsp capabilities
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
--- This is where you enable features that only work
--- if there is a language server active in the file
-vim.api.nvim_create_autocmd('LspAttach', {
-	desc = 'LSP actions',
-	callback = function(event)
-		local opts = { buffer = event.buf }
-
-		vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-		vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-		vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-		vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-		vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-		vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-		vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-		vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-		vim.keymap.set('n', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-		vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-
-		-- Show error message when hovering on an error
-		vim.o.updatetime = 250
-		vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
-	end,
+-- Set default config for all servers
+vim.lsp.config('*', {
+  capabilities = capabilities,
 })
 
+-- Define keymaps on LSP attach
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = { buffer = event.buf }
+
+    vim.keymap.set('n', 'K',     vim.lsp.buf.hover,           opts)
+    vim.keymap.set('n', 'gd',    vim.lsp.buf.definition,      opts)
+    vim.keymap.set('n', 'gD',    vim.lsp.buf.declaration,     opts)
+    vim.keymap.set('n', 'gi',    vim.lsp.buf.implementation,  opts)
+    vim.keymap.set('n', 'go',    vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', 'gr',    vim.lsp.buf.references,      opts)
+    vim.keymap.set('n', 'gs',    vim.lsp.buf.signature_help,  opts)
+    vim.keymap.set('n', '<F2>',  vim.lsp.buf.rename,          opts)
+    vim.keymap.set('n', '<F3>',  function() vim.lsp.buf.format({ async = true }) end, opts)
+    vim.keymap.set('n', '<F4>',  vim.lsp.buf.code_action,     opts)
+
+    -- Diagnostics on hover
+    vim.o.updatetime = 250
+    vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]])
+  end,
+})
+
+-- Setup completion
 local cmp = require('cmp')
 cmp.setup({
-	sources = {
-		{ name = 'nvim_lsp' },
-	},
-	snippet = {
-		expand = function(args)
-			-- You need Neovim v0.10 to use vim.snippet
-			vim.snippet.expand(args.body)
-		end,
-	},
-	preselect = cmp.PreselectMode.Item,
-	completion = {
-		completeopt = 'menu,menuone,noinsert'
-	},
-	mapping = cmp.mapping.preset.insert({
-		['<CR>'] = cmp.mapping.confirm({ select = true }),
-		['<Esc>'] = function(fallback)
-			if cmp.visible() then
-				cmp.abort() -- closes the completion menu
-				vim.api.nvim_feedkeys( -- normal escape behaviour
-					vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
-					"n",
-					false
-				)
-			else
-				fallback() -- default behavior
-			end
-		end,
-	})
+  sources = {
+    { name = 'nvim_lsp' },
+  },
+  snippet = {
+    expand = function(args)
+      vim.snippet.expand(args.body)
+    end,
+  },
+  preselect = cmp.PreselectMode.Item,
+  completion = {
+    completeopt = 'menu,menuone,noinsert',
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<Esc>'] = function(fallback)
+      if cmp.visible() then
+        cmp.abort()
+        vim.api.nvim_feedkeys(
+          vim.api.nvim_replace_termcodes('<Esc>', true, false, true),
+          'n',
+          false
+        )
+      else
+        fallback()
+      end
+    end,
+  }),
 })
 
--- Setting up LSPs for commonly used languages
-require('lspconfig').lua_ls.setup({})
-require('lspconfig').clangd.setup({})
-require('lspconfig').rust_analyzer.setup({})
-vim.api.nvim_create_autocmd("FileType", { --Hacky solution to make rust lsp work
-	pattern = "rust",
-	callback = function()
-		require('lspconfig').rust_analyzer.setup({})
-		vim.cmd("LspStart rust_analyzer")
-	end,
+-- Enable servers
+local servers = {
+  "lua_ls",
+  "clangd",
+  "rust_analyzer",
+  "pyright",
+  "ts_ls",
+  "jdtls",
+  "kotlin_language_server",
+  "sqls",
+}
+
+for _, name in ipairs(servers) do
+  vim.lsp.config(name, {})  -- define config
+  vim.lsp.enable(name)      -- start/enable server
+end
+
+-- Optional hack for Rust (if your setup needs it)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "rust",
+  callback = function()
+    vim.lsp.enable("rust_analyzer")
+  end,
 })
-require('lspconfig').pyright.setup({})
-require('lspconfig').ts_ls.setup({})
-require('lspconfig').jdtls.setup({})
-require('lspconfig').kotlin_language_server.setup({})
-require('lspconfig').sqls.setup({})
