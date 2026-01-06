@@ -1,6 +1,0 @@
-neovim
-clang
-lua-language-server
-rust-analyzer
-pyright
-typescript-language-server

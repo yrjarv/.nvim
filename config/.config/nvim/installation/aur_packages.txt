@@ -1,3 +1,0 @@
-jdtls
-kotlin-language-server
-sqls
