@@ -12,3 +12,10 @@ git clone git@github.com:yrjarv/nvim ~/nvim
 cd nvim
 stow */
 ```
+
+Then, install vimplug:
+
+```bash
+cd ~/.config/nvim
+./install-vimplug.sh
+```
