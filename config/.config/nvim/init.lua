@@ -9,6 +9,7 @@ Plug('hrsh7th/cmp-nvim-lsp')
 Plug('jiangmiao/auto-pairs')
 Plug('NStefan002/screenkey.nvim')
 Plug('airblade/vim-gitgutter')
+Plug('tpope/vim-fugitive')
 vim.call('plug#end')
 
 home = os.getenv("HOME")
