@@ -10,6 +10,8 @@ Plug('jiangmiao/auto-pairs')
 Plug('NStefan002/screenkey.nvim')
 Plug('airblade/vim-gitgutter')
 Plug('tpope/vim-fugitive')
+Plug('3rd/diagram.nvim')
+Plug('3rd/image.nvim')
 vim.call('plug#end')
 
 home = os.getenv("HOME")
@@ -19,3 +21,4 @@ require"keybinds"
 require"theme"
 require"treesitter"
 require"lsp"
+require"diagramconfig"
